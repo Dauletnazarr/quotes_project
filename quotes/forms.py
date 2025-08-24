@@ -6,7 +6,6 @@ class QuoteForm(forms.ModelForm):
         model = Quote
         fields = ('source', 'text', 'weight', 'is_active')
 
-    # Можно вообще без clean(), либо лёгкая нормализация текста:
     def clean_text(self):
         txt = (self.cleaned_data.get('text') or '').strip()
         return txt
