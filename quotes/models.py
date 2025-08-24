@@ -43,6 +43,15 @@ class Quote(models.Model):
                 qs = qs.exclude(pk=self.pk)
             if qs.count() >= 3:
                 raise ValidationError('У источника уже есть 3 активные цитаты.')
+        if self.source_id and self.text_normalized:
+            dup_qs = Quote.objects.filter(
+                source=self.source,
+                text_normalized=self.text_normalized,
+            )
+            if self.pk:
+                dup_qs = dup_qs.exclude(pk=self.pk)
+            if dup_qs.exists():
+                raise ValidationError({'text': 'Такая цитата уже существует для этого источника.'})
 
     def save(self, *args, **kwargs):
         self.text_normalized = ' '.join((self.text or '').lower().split())
