@@ -5,7 +5,8 @@
 ## Быстрый старт
 
 ```bash
-python -m venv .venv && source .venv/bin/activate
+python -m venv .venv
+.\.venv\Scripts\activate
 pip install -r requirements.txt
 python manage.py makemigrations
 python manage.py migrate
