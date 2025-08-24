@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}Случайная цитата{% endblock %}
+{% block content %}
+  <h1>Случайная цитата</h1>
+  {% if quote %}
+  <div class="card">
+    <blockquote style="font-size:1.2rem; line-height:1.5">
+      “{{ quote.text|linebreaksbr }}”
+    </blockquote>
+    <div class="muted">Источник: {{ quote.source.name }} (вес: {{ quote.weight }})</div>
+    <div class="row" style="margin-top:12px">
+      <button onclick="vote('{{ quote.pk }}','like')">👍 Нравится <span id="likes">{{ quote.likes }}</span></button>
+      <button onclick="vote('{{ quote.pk }}','dislike')">👎 Не нравится <span id="dislikes">{{ quote.dislikes }}</span></button>
+      <span class="muted">Просмотры: {{ quote.views }}</span>
+      <a href="{% url 'quotes:random' %}" style="margin-left:auto">Ещё цитату ↻</a>
+    </div>
+  </div>
+  {% else %}
+    <p>Цитат пока нет. <a href="{% url 'quotes:add' %}">Добавить первую</a>.</p>
+  {% endif %}
+{% endblock %}
+{% block scripts %}
+<script>
+  async function vote(id, kind) {
+    const url = `/${id}/${kind}/`;
+    const data = await postJSON(url);
+    if (data.likes !== undefined) document.getElementById('likes').innerText = data.likes;
+    if (data.dislikes !== undefined) document.getElementById('dislikes').innerText = data.dislikes;
+  }
+</script>
+{% endblock %}

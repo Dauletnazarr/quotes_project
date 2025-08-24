@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}Дашборд{% endblock %}
+{% block content %}
+  <h1>Дашборд</h1>
+  <div class="row">
+    <div class="card">Всего цитат: <b>{{ total_quotes }}</b></div>
+    <div class="card">Активных: <b>{{ active_quotes }}</b></div>
+  </div>
+  <h3 style="margin-top:16px">Лучшие источники (по сумме лайков)</h3>
+  <table>
+    <thead><tr><th>Источник</th><th>Цитат</th><th>Лайков</th><th>Просмотров</th></tr></thead>
+    <tbody>
+    {% for s in top_sources %}
+      <tr>
+        <td>{{ s.source__name }}</td>
+        <td>{{ s.cnt }}</td>
+        <td>{{ s.likes|default:0 }}</td>
+        <td>{{ s.views|default:0 }}</td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="4">Недостаточно данных</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

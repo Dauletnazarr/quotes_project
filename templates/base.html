@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <title>{% block title %}Quotes{% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 900px; margin: 24px auto; padding: 0 16px; }
+    .card { border: 1px solid #eee; border-radius: 12px; padding: 16px; box-shadow: 0 1px 4px rgba(0,0,0,.04); }
+    .muted { color: #666; font-size: .9rem; }
+    .row { display: flex; gap: 12px; align-items: center; }
+    button { padding: 8px 12px; border-radius: 10px; border: 1px solid #ddd; cursor: pointer; background: #fff; }
+    nav a { margin-right: 12px; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 8px; border-bottom: 1px solid #eee; text-align: left; }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="{% url 'quotes:random' %}">Случайная</a>
+    <a href="{% url 'quotes:add' %}">Добавить</a>
+    <a href="{% url 'quotes:top' %}">ТОП-10</a>
+    <a href="{% url 'quotes:dashboard' %}">Дашборд</a>
+  </nav>
+
+  {% block content %}{% endblock %}
+
+  <script>
+    // get csrftoken from cookie (Django docs)
+    function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
+    }
+    async function postJSON(url) {
+      const csrftoken = getCookie('csrftoken');
+      const res = await fetch(url, {method:'POST', headers:{'X-CSRFToken': csrftoken}});
+      return await res.json();
+    }
+  </script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

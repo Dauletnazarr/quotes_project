@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}ТОП-10{% endblock %}
+{% block content %}
+  <h1>ТОП-10 по лайкам</h1>
+  {% for q in quotes %}
+    <div class="card" style="margin-bottom:12px">
+      <div class="muted">Источник: {{ q.source.name }} · Вес: {{ q.weight }} · Просмотры: {{ q.views }}</div>
+      <blockquote style="margin:8px 0">“{{ q.text|linebreaksbr }}”</blockquote>
+      <div>👍 {{ q.likes }} · 👎 {{ q.dislikes }}</div>
+    </div>
+  {% empty %}
+    <p>Пока нет данных.</p>
+  {% endfor %}
+{% endblock %}
